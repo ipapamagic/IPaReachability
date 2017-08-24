@@ -1,0 +1,26 @@
+PODS:
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - IPaLog (1.0)
+  - IPaReachability (1.0):
+    - IPaLog
+
+DEPENDENCIES:
+  - FBSnapshotTestCase
+  - IPaReachability (from `../`)
+
+EXTERNAL SOURCES:
+  IPaReachability:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  IPaLog: 199e39af2831b48f83967747cadd00bbf505a103
+  IPaReachability: 2c3be5746fca37c5a52ff0bbf2d2a4db8f14c787
+
+PODFILE CHECKSUM: 6903cccf388413f13eddbea00addaf7e7bb2da92
+
+COCOAPODS: 1.3.1

@@ -1,0 +1,14 @@
+source 'https://github.com/ipapamagic/IPaPods.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+use_frameworks!
+
+target 'IPaReachability_Example' do
+  pod 'IPaReachability', :path => '../'
+
+  target 'IPaReachability_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase'
+  end
+end
