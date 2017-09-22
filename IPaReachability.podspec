@@ -1,4 +1,4 @@
-#
+	#
 # Be sure to run `pod lib lint IPaReachability.podspec' to ensure this is a
 # valid spec before submitting.
 #
@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IPaReachability'
-  s.version          = '1.0'
+  s.version          = '2.0'
   s.summary          = 'A short description of IPaReachability.'
 
 # This description is used to generate tags and improve search results.
@@ -40,4 +40,8 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
     s.dependency 'IPaLog'
+    s.xcconfig = {
+        "SWIFT_VERSION" => "4.0",
+        "SWIFT_SWIFT3_OBJC_INFERENCE" => "off"
+    }
 end
