@@ -16,7 +16,9 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     
     let reachability = Unmanaged<IPaReachability>.fromOpaque(info).takeUnretainedValue()
     NotificationCenter.default.post(name: NSNotification.Name(rawValue: IPaReachability.kIPaReachabilityChangedNotification), object: reachability)
-   
+    for handler in reachability.notificationReceivers.values {
+        handler(reachability)
+    }
 }
 @objc open class IPaReachability: NSObject {
     
@@ -29,6 +31,8 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     fileprivate var isRunning = false
     fileprivate var isLocalWiFi = false
     fileprivate var reachability: SCNetworkReachability?
+    fileprivate var notificationReceivers:[String:(IPaReachability) -> ()] = [String:(IPaReachability) -> ()]()
+    open static let sharedInternetReachability:IPaReachability = IPaReachability.reachabilityForInternetConnection()!
     open var connectionRequired: Bool
     {
         get {
@@ -86,6 +90,13 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             flags.contains(.isLocalAddress) ? "l" : "-",
             flags.contains(.isDirect) ? "d" : "-",comment)
     
+    }
+    open func addNotificationReceiver(for key:String,handler:@escaping (IPaReachability) -> ())
+    {
+        notificationReceivers[key] = handler
+    }
+    open func removeNotificationReceiver(for key:String) {
+        notificationReceivers.removeValue(forKey: key)
     }
     open func startNotifier() -> Bool
     {
