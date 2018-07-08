@@ -22,7 +22,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
 }
 @objc open class IPaReachability: NSObject {
     
-    public enum IPaNetworkStatus:Int {
+    @objc public enum IPaNetworkStatus:Int {
         case notReachable = 0
         case reachableByWifi
         case reachableByWWan
@@ -32,8 +32,8 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     fileprivate var isLocalWiFi = false
     fileprivate var reachability: SCNetworkReachability?
     fileprivate var notificationReceivers:[String:(IPaReachability) -> ()] = [String:(IPaReachability) -> ()]()
-    open static let sharedInternetReachability:IPaReachability = IPaReachability.reachabilityForInternetConnection()!
-    open var connectionRequired: Bool
+    @objc open static let sharedInternetReachability:IPaReachability = IPaReachability.forInternetConnection()!
+    @objc open var connectionRequired: Bool
     {
         get {
             guard let reachability = reachability else {
@@ -46,12 +46,12 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             return false
         }
     }
-    open var isNotReachable:Bool {
+    @objc open var isNotReachable:Bool {
         get {
             return currentStatus == .notReachable
         }
     }
-    open var currentStatus:IPaNetworkStatus {
+    @objc open var currentStatus:IPaNetworkStatus {
         get {
             guard let reachability = reachability else {
                 return .unknown
@@ -69,10 +69,14 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             return retVal
         }
     }
-    public class var kIPaReachabilityChangedNotification:String {
+    @objc public class var kIPaReachabilityChangedNotification:String {
         return "ReachabilityChangedNotification"
     }
-    
+    @objc public convenience init(hostName:String) {
+        self.init(reachability:SCNetworkReachabilityCreateWithName(nil, (hostName as NSString).utf8String!)!)
+
+        self.isLocalWiFi = false
+    }
     fileprivate init(reachability: SCNetworkReachability) {
         super.init()
         self.reachability = reachability
@@ -91,14 +95,14 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             flags.contains(.isDirect) ? "d" : "-",comment)
     
     }
-    open func addNotificationReceiver(for key:String,handler:@escaping (IPaReachability) -> ())
+    @objc open func addNotificationReceiver(for key:String,handler:@escaping (IPaReachability) -> ())
     {
         notificationReceivers[key] = handler
     }
-    open func removeNotificationReceiver(for key:String) {
+    @objc open func removeNotificationReceiver(for key:String) {
         notificationReceivers.removeValue(forKey: key)
     }
-    open func startNotifier() -> Bool
+    @objc open func startNotifier() -> Bool
     {
         guard let reachability = reachability, !isRunning else {
             return false
@@ -117,7 +121,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         }
         return retVal;
     }
-    open func stopNotifier()
+    @objc open func stopNotifier()
     {
         defer {
             isRunning = false
@@ -134,7 +138,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         
     }
 
-    open static func reachability(hostName:String) -> IPaReachability?
+    @objc open static func reachability(hostName:String) -> IPaReachability?
     {
         guard let reachablilty = SCNetworkReachabilityCreateWithName(nil, (hostName as NSString).utf8String!) else {
             return nil
@@ -143,7 +147,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         ipaRechability.isLocalWiFi = false
         return ipaRechability
     }
-    open static func reachability(hostAddress:UnsafePointer<sockaddr_in>) -> IPaReachability?
+    @objc open static func reachability(hostAddress:UnsafePointer<sockaddr_in>) -> IPaReachability?
     {
         
         guard let reachability = hostAddress.withMemoryRebound(to: sockaddr.self, capacity: 1, {
@@ -156,7 +160,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         ipaRechability.isLocalWiFi = false
         return ipaRechability
     }
-    open static func  reachabilityForInternetConnection() -> IPaReachability?
+    @objc open static func forInternetConnection() -> IPaReachability?
     {
         var address: sockaddr_in = sockaddr_in()
         address.sin_len = UInt8(MemoryLayout.size(ofValue: address))
@@ -165,7 +169,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         reachability?.isLocalWiFi = false
         return reachability
     }
-    open static func reachabilityForLocalWiFi() -> IPaReachability?
+    @objc open static func forLocalWiFi() -> IPaReachability?
     {
         var address: sockaddr_in = sockaddr_in()
         address.sin_len = UInt8(MemoryLayout.size(ofValue: address))
@@ -176,7 +180,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         return reachability
     }
     //MARK: Network Flag Handling
-    open func localWifiStatus(for flags:SCNetworkReachabilityFlags) -> IPaNetworkStatus
+    @objc open func localWifiStatus(for flags:SCNetworkReachabilityFlags) -> IPaNetworkStatus
     {
         printReachability(flags: flags, comment: "localWifiStatus")
         var retVal = IPaNetworkStatus.notReachable
@@ -185,7 +189,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         }
         return retVal
     }
-    open func networkStatus(for flags:SCNetworkReachabilityFlags) -> IPaNetworkStatus
+    @objc open func networkStatus(for flags:SCNetworkReachabilityFlags) -> IPaNetworkStatus
     {
         printReachability(flags: flags, comment: "networkStatus")
         
