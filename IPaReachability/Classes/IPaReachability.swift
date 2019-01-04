@@ -32,7 +32,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     fileprivate var isLocalWiFi = false
     fileprivate var reachability: SCNetworkReachability?
     fileprivate var notificationReceivers:[String:(IPaReachability) -> ()] = [String:(IPaReachability) -> ()]()
-    @objc open static let sharedInternetReachability:IPaReachability = IPaReachability.forInternetConnection()!
+    @objc public static let sharedInternetReachability:IPaReachability = IPaReachability.forInternetConnection()!
     @objc open var connectionRequired: Bool
     {
         get {
@@ -138,7 +138,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         
     }
 
-    @objc open static func reachability(hostName:String) -> IPaReachability?
+    @objc public static func reachability(hostName:String) -> IPaReachability?
     {
         guard let reachablilty = SCNetworkReachabilityCreateWithName(nil, (hostName as NSString).utf8String!) else {
             return nil
@@ -147,7 +147,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         ipaRechability.isLocalWiFi = false
         return ipaRechability
     }
-    @objc open static func reachability(hostAddress:UnsafePointer<sockaddr_in>) -> IPaReachability?
+    @objc public static func reachability(hostAddress:UnsafePointer<sockaddr_in>) -> IPaReachability?
     {
         
         guard let reachability = hostAddress.withMemoryRebound(to: sockaddr.self, capacity: 1, {
@@ -160,7 +160,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         ipaRechability.isLocalWiFi = false
         return ipaRechability
     }
-    @objc open static func forInternetConnection() -> IPaReachability?
+    @objc public static func forInternetConnection() -> IPaReachability?
     {
         var address: sockaddr_in = sockaddr_in()
         address.sin_len = UInt8(MemoryLayout.size(ofValue: address))
@@ -169,7 +169,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         reachability?.isLocalWiFi = false
         return reachability
     }
-    @objc open static func forLocalWiFi() -> IPaReachability?
+    @objc public static func forLocalWiFi() -> IPaReachability?
     {
         var address: sockaddr_in = sockaddr_in()
         address.sin_len = UInt8(MemoryLayout.size(ofValue: address))
