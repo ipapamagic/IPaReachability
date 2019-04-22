@@ -1,20 +1,12 @@
 PODS:
-  - FBSnapshotTestCase (2.1.4):
-    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
-  - FBSnapshotTestCase/Core (2.1.4)
-  - FBSnapshotTestCase/SwiftSupport (2.1.4):
-    - FBSnapshotTestCase/Core
   - IPaLog (2.3)
   - IPaReachability (2.4):
     - IPaLog (= 2.3)
 
 DEPENDENCIES:
-  - FBSnapshotTestCase
   - IPaReachability (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - FBSnapshotTestCase
   https://github.com/ipapamagic/IPaPods.git:
     - IPaLog
 
@@ -23,10 +15,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   IPaLog: c9285b90746c5ec7082db4efafe996d680a0c222
   IPaReachability: 6d31b884e7d1f2c5b2144b9a80ca068169fc886c
 
-PODFILE CHECKSUM: 6903cccf388413f13eddbea00addaf7e7bb2da92
+PODFILE CHECKSUM: 9031fdcd203c7567be7feaa3fe8f52bacb78b388
 
 COCOAPODS: 1.7.0.beta.2
