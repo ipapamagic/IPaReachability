@@ -19,6 +19,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     for handler in reachability.notificationReceivers.values {
         handler(reachability)
     }
+    reachability.updateCurrentState()
 }
 @objc open class IPaReachability: NSObject {
     
@@ -46,27 +47,25 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             return false
         }
     }
-    @objc open var isNotReachable:Bool {
+    @objc dynamic open var isNotReachable:Bool {
         get {
             return currentStatus == .notReachable
         }
     }
-    @objc open var currentStatus:IPaNetworkStatus {
+    var _currentStatus:IPaNetworkStatus = .notReachable
+    {
+        willSet {
+            self.willChangeValue(forKey: "isNotReachable")
+            self.willChangeValue(forKey: "currentStatus")
+        }
+        didSet {
+            self.didChangeValue(forKey: "currentStatus")
+            self.didChangeValue(forKey: "isNotReachable")
+        }
+    }
+    @objc dynamic open var currentStatus:IPaNetworkStatus {
         get {
-            guard let reachability = reachability else {
-                return .unknown
-            }
-            var retVal = IPaNetworkStatus.notReachable
-            var flags = SCNetworkReachabilityFlags()
-            if SCNetworkReachabilityGetFlags(reachability, &flags) {
-                if isLocalWiFi {
-                    retVal = self.localWifiStatus(for:flags)
-                }
-                else {
-                    retVal = self.networkStatus(for:flags)
-                }
-            }
-            return retVal
+            return _currentStatus
         }
     }
     @objc public class var kIPaReachabilityChangedNotification:String {
@@ -94,6 +93,24 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
             flags.contains(.isLocalAddress) ? "l" : "-",
             flags.contains(.isDirect) ? "d" : "-",comment)
     
+    }
+    func updateCurrentState() {
+        guard let reachability = reachability else {
+            self._currentStatus = .unknown
+            return
+        }
+        var retVal = IPaNetworkStatus.notReachable
+        var flags = SCNetworkReachabilityFlags()
+        if SCNetworkReachabilityGetFlags(reachability, &flags) {
+            if isLocalWiFi {
+                retVal = self.localWifiStatus(for:flags)
+            }
+            else {
+                retVal = self.networkStatus(for:flags)
+            }
+        }
+        self._currentStatus = retVal
+        
     }
     @objc open func addNotificationReceiver(for key:String,handler:@escaping (IPaReachability) -> ())
     {

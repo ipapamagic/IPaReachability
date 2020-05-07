@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IPaReachability'
-  s.version          = '2.4'
+  s.version          = '2.5'
   s.summary          = 'A short description of IPaReachability.'
   s.swift_version    = '5.0'
 # This description is used to generate tags and improve search results.
