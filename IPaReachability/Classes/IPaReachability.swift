@@ -79,7 +79,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     fileprivate init(reachability: SCNetworkReachability) {
         super.init()
         self.reachability = reachability
-        
+        self.updateCurrentState()
     }
     fileprivate func printReachability(flags:SCNetworkReachabilityFlags, comment:String)
     {
