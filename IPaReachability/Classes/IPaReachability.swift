@@ -83,16 +83,8 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     }
     fileprivate func printReachability(flags:SCNetworkReachabilityFlags, comment:String)
     {
-        IPaLog("Reachability Flag Status:%c%c %c%c%c%c%c%c%c %s\n", args: flags.contains(.isWWAN) ? "W" : "-",
-            flags.contains(.reachable) ? "R" : "-",
-            flags.contains(.transientConnection) ? "t" : "-",
-            flags.contains(.connectionRequired) ? "c" : "-",
-            flags.contains(.connectionOnTraffic) ? "C" : "-",
-            flags.contains(.interventionRequired) ? "i" : "-",
-            flags.contains(.connectionOnDemand) ? "D" : "-",
-            flags.contains(.isLocalAddress) ? "l" : "-",
-            flags.contains(.isDirect) ? "d" : "-",comment)
-    
+        IPaLog("Reachability Flag Status:\(flags.contains(.isWWAN) ? "W" : "-")\(flags.contains(.reachable) ? "R" : "-")\(flags.contains(.transientConnection) ? "t" : "-")\(flags.contains(.connectionRequired) ? "c" : "-")\(flags.contains(.connectionOnTraffic) ? "C" : "-")\(flags.contains(.interventionRequired) ? "i" : "-")\(flags.contains(.connectionOnDemand) ? "D" : "-")\(flags.contains(.isLocalAddress) ? "l" : "-")\(flags.contains(.isDirect) ? "d" : "-") \(comment)")
+            
     }
     func updateCurrentState() {
         guard let reachability = reachability else {
