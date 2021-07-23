@@ -111,6 +111,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
     @objc open func removeNotificationReceiver(for key:String) {
         notificationReceivers.removeValue(forKey: key)
     }
+    @discardableResult
     @objc open func startNotifier() -> Bool
     {
         guard let reachability = reachability, !isRunning else {
