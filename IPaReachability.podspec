@@ -31,7 +31,7 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '10.3'
 
   s.source_files = 'IPaReachability/Classes/**/*'
-  
+  s.dependency 'IPaLog', '~>3.0'
   # s.resource_bundles = {
   #   'IPaReachability' => ['IPaReachability/Assets/*.png']
   # }
@@ -39,6 +39,6 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
-  s.dependency 'IPaLog','~>3.0'
+
 
 end

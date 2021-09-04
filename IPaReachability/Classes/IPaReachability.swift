@@ -86,23 +86,28 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         IPaLog("Reachability Flag Status:\(flags.contains(.isWWAN) ? "W" : "-")\(flags.contains(.reachable) ? "R" : "-")\(flags.contains(.transientConnection) ? "t" : "-")\(flags.contains(.connectionRequired) ? "c" : "-")\(flags.contains(.connectionOnTraffic) ? "C" : "-")\(flags.contains(.interventionRequired) ? "i" : "-")\(flags.contains(.connectionOnDemand) ? "D" : "-")\(flags.contains(.isLocalAddress) ? "l" : "-")\(flags.contains(.isDirect) ? "d" : "-") \(comment)")
             
     }
-    func updateCurrentState() {
+    func updateCurrentState(_ flags:SCNetworkReachabilityFlags? = nil) {
         guard let reachability = reachability else {
             self._currentStatus = .unknown
             return
         }
         var retVal = IPaNetworkStatus.notReachable
-        var flags = SCNetworkReachabilityFlags()
-        if SCNetworkReachabilityGetFlags(reachability, &flags) {
-            if isLocalWiFi {
-                retVal = self.localWifiStatus(for:flags)
+        var flags = flags
+        if flags == nil {
+            var _flags = SCNetworkReachabilityFlags()
+            guard SCNetworkReachabilityGetFlags(reachability, &_flags) else  {
+                self._currentStatus = .notReachable
+                return
             }
-            else {
-                retVal = self.networkStatus(for:flags)
-            }
+            flags = _flags
+        }
+        if isLocalWiFi {
+            retVal = self.localWifiStatus(for:flags!)
+        }
+        else {
+            retVal = self.networkStatus(for:flags!)
         }
         self._currentStatus = retVal
-        
     }
     @objc open func addNotificationReceiver(for key:String,handler:@escaping (IPaReachability) -> ())
     {
