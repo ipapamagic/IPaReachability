@@ -129,7 +129,7 @@ func reachabilityCallback(_ reachability:SCNetworkReachability, flags: SCNetwork
         if(SCNetworkReachabilitySetCallback(reachability, reachabilityCallback, &context))
         {
             
-            if(SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue))
+            if(SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue))
             {
                 retVal = true
             }
